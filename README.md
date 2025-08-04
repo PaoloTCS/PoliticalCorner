@@ -1,8 +1,6 @@
 # PoliticalCorner
 
-A modern website dedicated to political philosophy discussions, organized by continents with a structured Thesis → Counter Thesis → Synthesis format.
-
-## 🌍 About
+**PoliticalCorner** - Where thoughtful political discussions meet structured analysis.
 
 PoliticalCorner is a platform for thoughtful political and economic discussions that follows a unique three-part structure:
 
