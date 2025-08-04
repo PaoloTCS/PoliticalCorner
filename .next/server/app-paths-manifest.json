@@ -1,7 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/resources/page": "app/resources/page.js",
-  "/continents/europe/page": "app/continents/europe/page.js",
-  "/continents/asia/page": "app/continents/asia/page.js",
-  "/methodology/page": "app/methodology/page.js"
-}
