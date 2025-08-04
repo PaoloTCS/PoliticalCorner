@@ -51,8 +51,8 @@ const politicalPhilosophies = [
     id: 'liberalism',
     name: 'Liberalism',
     description: 'Emphasizes individual freedom, equality, and limited government intervention',
-    authors: ['John Locke', 'John Stuart Mill', 'Isaiah Berlin'],
-    keyWorks: ['Two Treatises', 'On Liberty', 'Two Concepts of Liberty'],
+    authors: ['John Locke', 'John Stuart Mill', 'Isaiah Berlin', 'F.A. Hayek', 'Milton Friedman'],
+    keyWorks: ['Two Treatises', 'On Liberty', 'Two Concepts of Liberty', 'The Road to Serfdom', 'Capitalism and Freedom'],
     themes: ['Individual Liberty', 'Tolerance', 'Limited Government'],
     relatedTopics: ['Natural Rights', 'Democracy', 'Constitutionalism']
   },
@@ -181,6 +181,22 @@ const modernThinkers = [
     keyWorks: ['Democracy in America', 'The Old Regime and the Revolution'],
     themes: ['Democratic Society', 'Civil Society', 'Tyranny of Majority'],
     influence: 'Democratic theory and civil society'
+  },
+  {
+    id: 'hayek',
+    name: 'F.A. Hayek',
+    period: '1899-1992',
+    keyWorks: ['The Road to Serfdom', 'The Constitution of Liberty', 'Law, Legislation and Liberty'],
+    themes: ['Spontaneous Order', 'Knowledge Problem', 'Rule of Law'],
+    influence: 'Austrian economics and classical liberalism'
+  },
+  {
+    id: 'friedman',
+    name: 'Milton Friedman',
+    period: '1912-2006',
+    keyWorks: ['Capitalism and Freedom', 'Free to Choose', 'A Monetary History of the United States'],
+    themes: ['Monetarism', 'Free Market Advocacy', 'School Choice'],
+    influence: 'Chicago School economics and market liberalism'
   }
 ]
 
@@ -266,6 +282,14 @@ export default function ResourcesPage() {
                              <span key={author}>
                                {author === 'John Locke' ? (
                                  <Link href="/authors/locke" className="text-primary-600 hover:text-primary-700 underline">
+                                   {author}
+                                 </Link>
+                               ) : author === 'F.A. Hayek' ? (
+                                 <Link href="/authors/hayek" className="text-primary-600 hover:text-primary-700 underline">
+                                   {author}
+                                 </Link>
+                               ) : author === 'Milton Friedman' ? (
+                                 <Link href="/authors/friedman" className="text-primary-600 hover:text-primary-700 underline">
                                    {author}
                                  </Link>
                                ) : (
@@ -395,6 +419,20 @@ export default function ResourcesPage() {
                          <div className="pt-2">
                            <Link href="/authors/machiavelli" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
                              Read More About Machiavelli →
+                           </Link>
+                         </div>
+                       )}
+                       {thinker.name === 'F.A. Hayek' && (
+                         <div className="pt-2">
+                           <Link href="/authors/hayek" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                             Read More About F.A. Hayek →
+                           </Link>
+                         </div>
+                       )}
+                       {thinker.name === 'Milton Friedman' && (
+                         <div className="pt-2">
+                           <Link href="/authors/friedman" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                             Read More About Milton Friedman →
                            </Link>
                          </div>
                        )}
