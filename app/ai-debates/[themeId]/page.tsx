@@ -123,6 +123,13 @@ Government has a legitimate interest in protecting public safety, and limited sp
   }
 }
 
+// Generate static params for static export
+export async function generateStaticParams() {
+  return Object.keys(debateData).map((themeId) => ({
+    themeId,
+  }))
+}
+
 export default function DebatePage({ params }: { params: { themeId: string } }) {
   const themeData = debateData[params.themeId as keyof typeof debateData]
 
