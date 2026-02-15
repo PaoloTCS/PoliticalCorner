@@ -23,7 +23,17 @@ function sign(value: string, secret: string) {
 }
 
 function getSecret() {
-  return process.env.SESSION_SECRET ?? 'dev-insecure-session-secret-change-me'
+  const secret = process.env.SESSION_SECRET
+  
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('SESSION_SECRET environment variable is required in production')
+    }
+    console.warn('⚠️  Using insecure session secret in development. Set SESSION_SECRET for production.')
+    return 'dev-insecure-session-secret-change-me'
+  }
+  
+  return secret
 }
 
 export function getSessionCookieName() {

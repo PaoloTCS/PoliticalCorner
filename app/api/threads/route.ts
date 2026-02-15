@@ -28,6 +28,21 @@ type ThreadStore = {
 
 const dataFilePath = path.join(process.cwd(), 'data', 'threads.json')
 
+async function ensureDataFile() {
+  const dir = path.dirname(dataFilePath)
+  try {
+    await fs.access(dir)
+  } catch {
+    await fs.mkdir(dir, { recursive: true })
+  }
+  
+  try {
+    await fs.access(dataFilePath)
+  } catch {
+    await fs.writeFile(dataFilePath, JSON.stringify({ threads: [] }, null, 2) + '\n', 'utf8')
+  }
+}
+
 async function readStore(): Promise<ThreadStore> {
   if (hasDatabase()) {
     const { rows } = await dbQuery<{
@@ -59,6 +74,7 @@ async function readStore(): Promise<ThreadStore> {
     }
   }
 
+  await ensureDataFile()
   const raw = await fs.readFile(dataFilePath, 'utf8')
   return JSON.parse(raw) as ThreadStore
 }
@@ -85,6 +101,7 @@ async function writeStore(store: ThreadStore) {
     return
   }
 
+  await ensureDataFile()
   await fs.writeFile(dataFilePath, JSON.stringify(store, null, 2) + '\n', 'utf8')
 }
 

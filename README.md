@@ -40,6 +40,7 @@ The website is organized by geographic continents (Asia, Americas, Europe, Afric
 ### Prerequisites
 - Node.js 18+ 
 - npm or yarn
+- (Optional) PostgreSQL database for production durability
 
 ### Installation
 
@@ -54,12 +55,24 @@ cd PoliticalCorner
 npm install
 ```
 
-3. Run the development server:
+3. Configure environment variables:
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local` and set:
+- **Required for production**: `SESSION_SECRET` (long random string)
+- **Optional AI providers**: `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`
+- **Optional Turnstile**: `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY`
+- **Optional database**: `DATABASE_URL` (PostgreSQL connection string)
+- **Policy settings**: `ANON_DAILY_QUERY_LIMIT`, `KNOWLEDGE_THREAD_THRESHOLD`
+
+4. Run the development server:
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Available Scripts
 
@@ -227,5 +240,23 @@ Before public testing, copy `.env.example` to `.env.local` and set values.
 
 ### Important production note
 
-This project currently stores users/usage/threads in local JSON files under `data/`.
-For real production durability and concurrency, migrate these stores to a database.
+**Data persistence options:**
+
+This project supports two storage modes:
+
+1. **JSON File Storage (default for development)**
+   - Data stored in `data/` directory (auto-created on first run)
+   - Files: `users.json`, `usage.json`, `threads.json`, `philosophies.json`
+   - ⚠️ Not suitable for production (no concurrency safety, no durability guarantees)
+
+2. **PostgreSQL Database (recommended for production)**
+   - Set `DATABASE_URL` environment variable (e.g., Railway Postgres, Supabase, Neon)
+   - Schema auto-initializes on first connection
+   - Provides durability, concurrency safety, and scalability
+   - Example: `DATABASE_URL=postgresql://user:pass@host:5432/dbname`
+   - Set `DATABASE_SSL=disable` only if your DB doesn't require SSL
+
+**Migration from JSON to Database:**
+- When you set `DATABASE_URL`, the app automatically switches to database mode
+- Existing JSON files are ignored (not automatically migrated)
+- For data migration, manually export/import using custom scripts or SQL

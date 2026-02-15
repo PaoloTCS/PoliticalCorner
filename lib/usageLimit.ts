@@ -34,12 +34,29 @@ function getIdentityFromHeaders(headers: Headers) {
   return hash(`${ip}:${ua}`)
 }
 
+async function ensureDataFile() {
+  const dir = path.dirname(dataFilePath)
+  try {
+    await fs.access(dir)
+  } catch {
+    await fs.mkdir(dir, { recursive: true })
+  }
+  
+  try {
+    await fs.access(dataFilePath)
+  } catch {
+    await fs.writeFile(dataFilePath, JSON.stringify({ usage: [] }, null, 2) + '\n', 'utf8')
+  }
+}
+
 async function readStore(): Promise<UsageStore> {
+  await ensureDataFile()
   const raw = await fs.readFile(dataFilePath, 'utf8')
   return JSON.parse(raw) as UsageStore
 }
 
 async function writeStore(store: UsageStore) {
+  await ensureDataFile()
   await fs.writeFile(dataFilePath, JSON.stringify(store, null, 2) + '\n', 'utf8')
 }
 

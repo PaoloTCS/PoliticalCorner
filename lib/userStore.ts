@@ -21,6 +21,21 @@ type UserStore = {
 
 const dataFilePath = path.join(process.cwd(), 'data', 'users.json')
 
+async function ensureDataFile() {
+  const dir = path.dirname(dataFilePath)
+  try {
+    await fs.access(dir)
+  } catch {
+    await fs.mkdir(dir, { recursive: true })
+  }
+  
+  try {
+    await fs.access(dataFilePath)
+  } catch {
+    await fs.writeFile(dataFilePath, JSON.stringify({ users: [] }, null, 2) + '\n', 'utf8')
+  }
+}
+
 export async function readUsers(): Promise<UserStore> {
   if (hasDatabase()) {
     const { rows } = await dbQuery<{
@@ -46,6 +61,7 @@ export async function readUsers(): Promise<UserStore> {
     }
   }
 
+  await ensureDataFile()
   const raw = await fs.readFile(dataFilePath, 'utf8')
   return JSON.parse(raw) as UserStore
 }
@@ -69,6 +85,7 @@ export async function writeUsers(store: UserStore) {
     return
   }
 
+  await ensureDataFile()
   await fs.writeFile(dataFilePath, JSON.stringify(store, null, 2) + '\n', 'utf8')
 }
 

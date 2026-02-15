@@ -29,6 +29,63 @@ const defaultTopics = {
   Africa: 'Emerging Discussion',
 }
 
+async function ensureDataFile() {
+  const dir = path.dirname(dataFilePath)
+  try {
+    await fs.access(dir)
+  } catch {
+    await fs.mkdir(dir, { recursive: true })
+  }
+  
+  try {
+    await fs.access(dataFilePath)
+  } catch {
+    const corePhilosophies: PhilosophyRecord[] = [
+      {
+        name: 'Natural Rights',
+        source: 'core',
+        byContinent: {
+          Asia: 'Democracy in Asia',
+          Americas: 'Democratic Systems',
+          Europe: 'Social Democracy',
+          Africa: 'Post-Colonial Rights',
+        },
+      },
+      {
+        name: 'Classical Republicanism',
+        source: 'core',
+        byContinent: {
+          Asia: 'Regional Cooperation',
+          Americas: 'Civic Participation',
+          Europe: 'EU Integration',
+          Africa: 'Pan-Africanism',
+        },
+      },
+      {
+        name: 'Constitutionalism',
+        source: 'core',
+        byContinent: {
+          Asia: 'Economic Development',
+          Americas: 'Economic Models',
+          Europe: 'Welfare States',
+          Africa: 'Development Models',
+        },
+      },
+      {
+        name: 'Social Contract',
+        source: 'core',
+        byContinent: {
+          Asia: 'Cultural Adaptation',
+          Americas: 'Social Justice',
+          Europe: 'Democratic Governance',
+          Africa: 'Sovereignty',
+        },
+      },
+    ]
+    await fs.writeFile(dataFilePath, JSON.stringify({ philosophies: corePhilosophies }, null, 2) + '\n', 'utf8')
+  }
+}
+
 async function readStore(): Promise<PhilosophyStore> {
   if (hasDatabase()) {
     const { rows } = await dbQuery<{ name: string; source: 'core' | 'user'; by_continent: PhilosophyRecord['byContinent'] }>(
@@ -39,6 +96,7 @@ async function readStore(): Promise<PhilosophyStore> {
     }
   }
 
+  await ensureDataFile()
   const raw = await fs.readFile(dataFilePath, 'utf8')
   return JSON.parse(raw) as PhilosophyStore
 }
@@ -58,6 +116,7 @@ async function writeStore(store: PhilosophyStore) {
     return
   }
 
+  await ensureDataFile()
   await fs.writeFile(dataFilePath, JSON.stringify(store, null, 2) + '\n', 'utf8')
 }
 
