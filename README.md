@@ -212,3 +212,20 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 **PoliticalCorner** - Where thoughtful political discussions meet structured analysis. 
+## Online Test Configuration
+
+Before public testing, copy `.env.example` to `.env.local` and set values.
+
+### Policy behavior implemented
+
+- Everyone can view pages and `/threads`
+- Anonymous users can ask up to `ANON_DAILY_QUERY_LIMIT` questions/day
+- After limit, users must register/login to continue
+- Permanent thread creation unlocks at `KNOWLEDGE_THREAD_THRESHOLD`
+- Admin role bypasses the threshold
+- Turnstile verification is enforced when `TURNSTILE_SECRET_KEY` is set
+
+### Important production note
+
+This project currently stores users/usage/threads in local JSON files under `data/`.
+For real production durability and concurrency, migrate these stores to a database.

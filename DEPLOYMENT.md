@@ -141,3 +141,65 @@ The deployment includes:
 **Your PoliticalCorner website is now ready for deployment!** 🎉
 
 Follow the setup steps above to get your website live on Cloudflare Pages. 
+## Access Policy (Public + Gated Participation)
+
+This version supports your policy:
+- Anyone can view content and permanent thread archive (`/threads`)
+- Anonymous users can ask only a limited number of questions per day
+- Users must register/login to continue after quota
+- Permanent thread creation is allowed only after user knowledge score reaches threshold
+
+### Required Environment Variables
+
+Set these in production:
+
+- `SESSION_SECRET` = strong random secret for signed session cookies
+- `ANON_DAILY_QUERY_LIMIT` = anonymous daily question limit (example: `5`)
+- `KNOWLEDGE_THREAD_THRESHOLD` = score required to create permanent thread (example: `20`)
+
+Optional AI provider keys:
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL` (default: `gpt-4.1-mini`)
+- `OPENAI_STT_MODEL` (default: `whisper-1`)
+- `ANTHROPIC_API_KEY`
+- `ANTHROPIC_MODEL` (default: `claude-3-5-sonnet-latest`)
+
+### Data Files
+
+This deployment persists data in JSON files under `/data`:
+- `data/users.json` (registered users + knowledge scores)
+- `data/usage.json` (anonymous daily quota counters)
+- `data/threads.json` (permanent public threads)
+- `data/philosophies.json` (community-added philosophies)
+
+If deploying to stateless infrastructure, migrate these to a database (recommended).
+
+### Cloudflare Access Recommendation
+
+For stronger human verification and identity in production:
+- Use Cloudflare Turnstile on question submission
+- Use Cloudflare Access or external auth for account identity
+
+
+## Recommended Online Test Deployment (Dynamic App)
+
+Because this version uses API routes (`/api/*`), do **not** use static export deployment.
+
+### Fastest path: Vercel + Cloudflare DNS
+
+1. Import `PaoloTCS/PoliticalCorner` into Vercel.
+2. Set environment variables from `.env.example`.
+3. Deploy and verify endpoints:
+   - `/api/auth/me`
+   - `/api/ai/classify`
+   - `/api/threads`
+4. In Cloudflare DNS for `politicalcorner.com`, point your domain to the Vercel target.
+5. Enable HTTPS and test:
+   - Anonymous query cap works
+   - Registration/login works
+   - Thread creation unlocks after knowledge score threshold
+   - Public thread archive visible at `/threads`
+
+### Cloudflare-only route
+
+If you want to host runtime on Cloudflare directly, use a Next.js-on-Workers setup (OpenNext), not static Pages output.

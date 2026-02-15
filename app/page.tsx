@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { GlobeAltIcon, AcademicCapIcon, ChartBarIcon } from '@heroicons/react/24/outline'
+import AIQueryPanel from './components/AIQueryPanel'
+import CommunityPhilosophyMatrix from './components/CommunityPhilosophyMatrix'
 
 const continents = [
   {
@@ -270,16 +272,31 @@ export default function Home() {
               </tbody>
             </table>
           </div>
-          
+
+          <CommunityPhilosophyMatrix />
+
           <div className="text-center mt-8">
+            <div className="flex items-center justify-center gap-3">
             <Link href="/resources" className="btn-primary">
-              Explore All Resources
+              Library: Texts, Sources, and Thinkers
             </Link>
+            
+            
+            <Link href="/arena" className="btn-secondary">
+              Debate Arena: Round Robin
+            </Link>
+          </div>
+          <p className="text-sm text-secondary-600 mt-3">
+            Library: browse core readings and references. Tribunal Lab: run structured mediated debates with anti-ad-hominem guardrails.
+          </p>
           </div>
         </div>
       </section>
 
       {/* Continents Section */}
+
+      <AIQueryPanel />
+
       <section id="continents" className="py-16 bg-secondary-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
